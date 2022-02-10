@@ -59,14 +59,16 @@ export const TodoList = () => {
 			// numberStore = [...numberStore, newNumber];
 		}
 	};
-	let deleteTask = (e) =>
-		setList(
-			list.filter((eachtask) => {
-				console.log(eachtask != e.target.previousSibling.data);
-				return eachtask != e.target.previousSibling.data;
-			})
-		);
+	let deleteTask = (index) => {
+		// let newList = list.filter((eachtask) => {
+		// 	console.log(eachtask != e.target.previousSibling.data);
+		// 	return eachtask != e.target.previousSibling.data;
+		// });
 
+		setList(list.filter((item, i) => index != i));
+		console.log("this is the list" + list);
+		putFetch(list);
+	};
 	// use get and useeffect
 
 	return (
@@ -86,7 +88,7 @@ export const TodoList = () => {
 								{task.label}
 								<i
 									className="fa fa-trash pull-right"
-									onClick={deleteTask}></i>
+									onClick={() => deleteTask(index)}></i>
 							</span>
 						</li>
 					);
@@ -101,7 +103,6 @@ export const TodoList = () => {
 		</div>
 	);
 };
-
 //add todo
 //delete todo
 //edit todo

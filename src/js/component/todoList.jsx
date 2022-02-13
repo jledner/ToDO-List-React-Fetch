@@ -52,8 +52,8 @@ export const TodoList = () => {
 		if (e.keyCode == 13) {
 			console.log(inputValue);
 			setList([...list, { label: inputValue, done: false }]);
-			e.target.value = "";
 			putFetch([...list, { label: inputValue, done: false }]);
+			setInputValue("");
 			// let numberStore = [0, 1, 2];
 			// let newNumber = 12;
 			// numberStore = [...numberStore, newNumber];
@@ -69,26 +69,40 @@ export const TodoList = () => {
 		console.log("this is the list" + list);
 		putFetch(list);
 	};
-	// use get and useeffect
 
+	let editTask = (index) => {
+		let newArray = list.map((item, i) => {
+			if (index == i) {
+				console.log(item);
+				let newTask = prompt("Enter new task");
+				return { label: newTask, done: false };
+			}
+		});
+		setList(newArray);
+		putFetch(newArray);
+	};
 	return (
 		<div className="notepad">
 			<input
 				className="input py-2 full-width"
 				className="list-group-item"
 				placeholder="New item"
+				value={inputValue}
 				onChange={(e) => setInputValue(e.target.value)}
 				onKeyDown={(e) => addTask(e)}></input>
 
 			<ul className="list-group py-2">
 				{list.map((task, index) => {
 					return (
-						<li className="list-group-item" key={index}>
+						<li
+							className="list-group-item"
+							onClick={() => editTask(index)}
+							key={index}>
 							<span>
-								{task.label}
+								{/* {task.label} */}
 								<i
 									className="fa fa-trash pull-right"
-									onClick={() => deleteTask(index)}></i>
+									onClick={() => deleteTask(e)}></i>
 							</span>
 						</li>
 					);

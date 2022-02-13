@@ -72,18 +72,17 @@ export const TodoList = () => {
 	};
 
 	let editTask = (index) => {
-		let newArray = list.map((item, i) => {
-			if (index == i) {
-				return item;
-				// console.log(item);
-				// let newTask = prompt("Enter new task");
-				// return { label: newTask, done: false };
-				// --> Here you don't want to change the task name because that is the same as erasing it and entering a new one;
-				// Instead you want to mark it done by just changing the value in 'done'
-			}
-		});
-		setList(newArray);
-		putFetch(newArray);
+		// let newArray = list.map((item, i) => {
+		// 	if (index == i) {
+		// 		// console.log(item);
+		// 		// let newTask = prompt("Enter new task");
+		// 		// return { label: newTask, done: false };
+		// 		// --> Here you don't want to change the task name because that is the same as erasing it and entering a new one;
+		// 		// Instead you want to mark it done by just changing the value in 'done'
+		// 	}
+		// });
+		// setList(newArray);
+		// putFetch(newArray);
 	};
 
 	return (

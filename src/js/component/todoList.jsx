@@ -4,7 +4,10 @@ export const TodoList = () => {
 	const [inputValue, setInputValue] = useState("");
 	const [list, setList] = useState([]);
 	const url = "https://assets.breatheco.de/apis/fake/todos/user/jledner";
-	useEffect(() => getFetch(), []);
+
+	useEffect(() => {
+		return getFetch();
+	}, []);
 
 	function getFetch(params) {
 		fetch(url)
@@ -12,12 +15,11 @@ export const TodoList = () => {
 				if (!response.ok) {
 					throw Error(response.statusText);
 				}
-				// Read the response as json.
 				return response.json();
 			})
 			.then((responseAsJson) => {
-				// Do stuff with the JSONified response
-				console.log(responseAsJson);
+				// console.log(responseAsJson); --> instead of console.log, here we need to take the back end data and store it locally in the list array:
+				setList(responseAsJson);
 			})
 			.catch((error) => {
 				console.log("Looks like there was a problem: \n", error);
@@ -59,15 +61,28 @@ export const TodoList = () => {
 			// numberStore = [...numberStore, newNumber];
 		}
 	};
-	let deleteTask = (index) => {
-		// let newList = list.filter((eachtask) => {
-		// 	console.log(eachtask != e.target.previousSibling.data);
-		// 	return eachtask != e.target.previousSibling.data;
-		// });
 
-		setList(list.filter((item, i) => index != i));
-		console.log("this is the list" + list);
-		putFetch(list);
+	let deleteTask = (index) => {
+		console.log(index);
+		let newList = list.filter((eachtask, i) => index != i);
+		setList(newList);
+		console.log("this is the list: ", list); // you wanna separate string from object/array by comma so they don't get automatically concatenated in which case you will only see [Object object] instead of the contents of the actualy object
+		console.log("this is newList: ", newList);
+		putFetch(newList); //remember 'list' is not updated yet in the state due to its delayed behavior, you have to use 'newList'
+	};
+
+	let editTask = (index) => {
+		// let newArray = list.map((item, i) => {
+		// 	if (index == i) {
+		// 		// console.log(item);
+		// 		// let newTask = prompt("Enter new task");
+		// 		// return { label: newTask, done: false };
+		// 		// --> Here you don't want to change the task name because that is the same as erasing it and entering a new one;
+		// 		// Instead you want to mark it done by just changing the value in 'done'
+		// 	}
+		// });
+		// setList(newArray);
+		// putFetch(newArray);
 	};
 
 	let editTask = (index) => {
@@ -93,17 +108,20 @@ export const TodoList = () => {
 
 			<ul className="list-group py-2">
 				{list.map((task, index) => {
+					console.log(task);
+					console.log(list);
 					return (
-						<li
-							className="list-group-item"
-							onClick={() => editTask(index)}
-							key={index}>
-							<span>
-								{/* {task.label} */}
-								<i
-									className="fa fa-trash pull-right"
-									onClick={() => deleteTask(e)}></i>
+						<li className="list-group-item" key={index}>
+							<span
+							//You couldn't have this in the 'li' tag because it was conflicting with the onClick of the <i> tag below which is also within the li; different oncClick event have to be inside different tags that are not nested within each other:
+							// onClick={() => editTask(index)} //--> I commented this out until you fix your editTask so it does not crash
+							>
+								{task.label}
 							</span>
+							<i
+								className="fa fa-trash pull-right"
+								onClick={() => deleteTask(index)} //we don't need to pass 'e' here but 'index' to identify the task you need deleted from the 'list' array
+							></i>
 						</li>
 					);
 				})}
